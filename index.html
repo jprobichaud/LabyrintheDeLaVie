@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <div class="timer">Temps: <span id="timer">0:00</span></div>
+            <div class="toggles">
+                <label><input type="checkbox" id="fogOfWar" checked> Fog of War</label>
+                <label><input type="checkbox" id="showExit" checked> Montrer la sortie</label>
+                <label><input type="checkbox" id="showPath" checked> Tracer le chemin</label>
+                <label><input type="checkbox" id="showPortals" checked> Montrer les portails</label>
+            </div>
+            <button id="newGame">Nouvelle partie</button>
+        </div>
+        <div class="game-area">
+            <canvas id="mazeCanvas"></canvas>
+            <div class="legend">
+                <h3>Legend:</h3>
+                <div class="legend-item">
+                    <div class="legend-symbol player"></div>
+                    <span>Joueur</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol exit"></div>
+                    <span>Sortie</span>
+                </div>
+                <div class="legend-item portal-legend">
+                    <div class="legend-symbol portal"></div>
+                    <span>Portail de téléportation</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol path"></div>
+                    <span>Ton chemin</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="victory" class="hidden">
+        <div class="victory-content">
+            <h1>Bravo!</h1>
+            <p>Temps: <span id="finalTime">0:00</span></p>
+            <button id="playAgain">Rejouer</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 

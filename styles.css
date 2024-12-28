@@ -1,0 +1,139 @@
+body {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggles {
+    display: flex;
+    gap: 20px;
+}
+
+.timer {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.game-area {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+canvas {
+    border: 2px solid #333;
+}
+
+.legend {
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.legend h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.legend-symbol {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+}
+
+.legend-symbol.player {
+    background: red;
+    border-radius: 50%;
+}
+
+.legend-symbol.exit {
+    background: green;
+}
+
+.legend-symbol.portal {
+    background: purple;
+    border-radius: 50%;
+}
+
+.legend-symbol.path {
+    background: rgba(100, 149, 237, 0.5);
+    border: 1px solid rgba(65, 105, 225, 0.8);
+}
+
+#victory {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.victory-content {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+.portal-legend {
+    display: none;
+}
+
+input#showPortals:checked ~ .container .portal-legend {
+    display: flex;
+}
+
+/* Alternative fix if the above doesn't work due to DOM structure: */
+#showPortals:checked + .game-area .portal-legend,
+.toggles:has(#showPortals:checked) ~ .game-area .portal-legend {
+    display: flex;
+} 
