@@ -429,3 +429,49 @@ class MazeGame {
 
 // Start the game when the page loads
 window.onload = () => new MazeGame(); 
+
+// Add this to your initialization code
+function initControls() {
+    // Touch/click controls
+    const buttons = {
+        'upBtn': 'ArrowUp',
+        'leftBtn': 'ArrowLeft',
+        'rightBtn': 'ArrowRight',
+        'downBtn': 'ArrowDown'
+    };
+
+    for (const [btnId, keyValue] of Object.entries(buttons)) {
+        const button = document.getElementById(btnId);
+        if (button) {
+            // Handle both touch and click events
+            ['touchstart', 'mousedown'].forEach(eventType => {
+                button.addEventListener(eventType, (e) => {
+                    e.preventDefault(); // Prevent default behavior
+                    // Create and dispatch a keyboard event
+                    const keyEvent = new KeyboardEvent('keydown', {
+                        key: keyValue,
+                        code: keyValue,
+                        keyCode: keyValue === 'ArrowUp' ? 38 :
+                                keyValue === 'ArrowDown' ? 40 :
+                                keyValue === 'ArrowLeft' ? 37 : 39,
+                        which: keyValue === 'ArrowUp' ? 38 :
+                               keyValue === 'ArrowDown' ? 40 :
+                               keyValue === 'ArrowLeft' ? 37 : 39,
+                        bubbles: true
+                    });
+                    document.dispatchEvent(keyEvent);
+                });
+            });
+
+            // Add visual feedback when button is pressed
+            button.addEventListener('mousedown', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.4)');
+            button.addEventListener('mouseup', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
+            button.addEventListener('mouseleave', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
+            button.addEventListener('touchstart', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.4)');
+            button.addEventListener('touchend', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
+        }
+    }
+}
+
+// Make sure to call initControls when the page loads
+document.addEventListener('DOMContentLoaded', initControls); 

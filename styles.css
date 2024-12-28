@@ -136,4 +136,30 @@ input#showPortals:checked ~ .container .portal-legend {
 #showPortals:checked + .game-area .portal-legend,
 .toggles:has(#showPortals:checked) ~ .game-area .portal-legend {
     display: flex;
+}
+
+.game-controls {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.horizontal-controls {
+    display: flex;
+    gap: 20px;
+}
+
+.game-controls button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    touch-action: manipulation;
 } 
