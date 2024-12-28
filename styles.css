@@ -87,25 +87,6 @@ canvas {
     border: 1px solid rgba(65, 105, 225, 0.8);
 }
 
-#victory {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.victory-content {
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    text-align: center;
-}
-
 .hidden {
     display: none;
 }

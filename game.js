@@ -23,15 +23,9 @@ class MazeGame {
         this.canvas.width = this.cellSize * 11;
         this.canvas.height = this.cellSize * 11;
 
-        console.log('Before hiding victory screen');
-        const victoryElement = document.getElementById('victory');
-        if (victoryElement) {
-            victoryElement.style.display = 'none';
-            victoryElement.classList.add('hidden');
-            console.log('Victory screen hidden');
-        } else {
-            console.error('Victory element not found!');
-        }
+        // Add victory text properties
+        this.showVictoryText = false;
+        this.victoryTime = '';
 
         this.setupControls();
         
@@ -71,14 +65,6 @@ class MazeGame {
             // Use the new seed to regenerate the maze
             regenerateWithSeed(newSeed);
         });
-        document.getElementById('playAgain').addEventListener('click', () => {
-            document.getElementById('victory').classList.add('hidden');
-            // Generate and set new random seed
-            const newSeed = Math.floor(Math.random() * 1000000);
-            document.getElementById('seedInput').value = newSeed;
-            // Use the new seed to regenerate the maze
-            regenerateWithSeed(newSeed);
-        });
         
         // Add fog of war toggle handler
         document.getElementById('fogOfWar').addEventListener('change', () => {
@@ -91,6 +77,11 @@ class MazeGame {
             if (portalLegend) {
                 portalLegend.style.display = e.target.checked ? 'flex' : 'none';
             }
+            this.draw();
+        });
+
+        // Add arrow visibility handler
+        document.getElementById('showArrow').addEventListener('change', () => {
             this.draw();
         });
     }
@@ -172,11 +163,6 @@ class MazeGame {
     startGame() {
         console.log('StartGame called');
         
-        // Force hide victory screen first
-        const victoryElement = document.getElementById('victory');
-        victoryElement.style.display = 'none';
-        victoryElement.classList.add('hidden');
-        
         // Initialize player position
         this.playerPos = { 
             x: Math.floor(this.mazeSize/2), 
@@ -204,6 +190,8 @@ class MazeGame {
         this.timerInterval = setInterval(() => this.updateTimer(), 1000);
         
         this.gameInitialized = true;
+        this.showVictoryText = false;
+        this.victoryTime = '';
         this.draw();
         console.log('Game initialization complete');
     }
@@ -287,19 +275,16 @@ class MazeGame {
                 }
             }
 
-            this.draw();
-            
             // Check for victory
             if (this.playerPos.x === this.exitPos.x && 
                 this.playerPos.y === this.exitPos.y) {
                 console.log('Victory achieved!');
                 clearInterval(this.timerInterval);
-                const victoryElement = document.getElementById('victory');
-                victoryElement.style.display = 'flex';  // Use flex to center content
-                victoryElement.classList.remove('hidden');
-                document.getElementById('finalTime').textContent = 
-                    document.getElementById('timer').textContent;
+                this.showVictoryText = true;
+                this.victoryTime = document.getElementById('timer').textContent;
             }
+
+            this.draw();
         }
     }
 
@@ -394,8 +379,10 @@ class MazeGame {
                     this.cellSize/3, 0, Math.PI * 2);
         this.ctx.fill();
 
-        // Draw direction arrow when fog of war is on
-        if (isFogOfWar && document.getElementById('showExit').checked) {
+        // Draw direction arrow when fog of war is on and arrow is enabled
+        if (isFogOfWar && 
+            document.getElementById('showExit').checked && 
+            document.getElementById('showArrow').checked) {
             // Calculate angle to exit
             const dx = this.exitPos.x - this.playerPos.x;
             const dy = this.exitPos.y - this.playerPos.y;
@@ -435,6 +422,25 @@ class MazeGame {
             );
             
             this.ctx.stroke();
+        }
+
+        // Draw victory text if game is won
+        if (this.showVictoryText) {
+            const centerX = this.canvas.width / 2;
+            const centerY = this.canvas.height / 2;
+            
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillRect(centerX - 100, centerY - 40, 200, 80);
+            
+            this.ctx.fillStyle = 'white';
+            this.ctx.font = 'bold 24px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('Bravo!', centerX, centerY - 15);
+            this.ctx.font = '16px Arial';
+            this.ctx.fillText(`Temps: ${this.victoryTime}`, centerX, centerY + 15);
+            this.ctx.restore();
         }
     }
 }

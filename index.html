@@ -12,7 +12,11 @@
             <div class="timer">Temps: <span id="timer">0:00</span></div>
             <div class="toggles">
                 <label><input type="checkbox" id="fogOfWar" checked> Fog of War</label>
-                <label><input type="checkbox" id="showExit" checked> Montrer la sortie</label>
+                <label><input type="checkbox" id="showExit" checked> Afficher la sortie</label>
+                <label>
+    <input type="checkbox" id="showArrow" checked>
+    Pointer vers la sortie
+</label>
                 <label><input type="checkbox" id="showPath" checked> Tracer le chemin</label>
                 <label><input type="checkbox" id="showPortals" checked> Activer les portails</label>
             </div>
@@ -52,13 +56,6 @@
                 </div>
                 <button id="downBtn">↓</button>
             </div>
-        </div>
-    </div>
-    <div id="victory" class="hidden">
-        <div class="victory-content">
-            <h1>Bravo!</h1>
-            <p>Temps: <span id="finalTime">0:00</span></p>
-            <button id="playAgain">Rejouer</button>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
