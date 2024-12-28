@@ -1,3 +1,5 @@
+let game;
+
 class MazeGame {
     constructor() {
         console.log('Starting constructor');
@@ -62,10 +64,20 @@ class MazeGame {
 
     setupControls() {
         document.addEventListener('keydown', this.handleKeyPress.bind(this));
-        document.getElementById('newGame').addEventListener('click', () => this.startGame());
+        document.getElementById('newGame').addEventListener('click', () => {
+            // Generate and set new random seed
+            const newSeed = Math.floor(Math.random() * 1000000);
+            document.getElementById('seedInput').value = newSeed;
+            // Use the new seed to regenerate the maze
+            regenerateWithSeed(newSeed);
+        });
         document.getElementById('playAgain').addEventListener('click', () => {
             document.getElementById('victory').classList.add('hidden');
-            this.startGame();
+            // Generate and set new random seed
+            const newSeed = Math.floor(Math.random() * 1000000);
+            document.getElementById('seedInput').value = newSeed;
+            // Use the new seed to regenerate the maze
+            regenerateWithSeed(newSeed);
         });
         
         // Add fog of war toggle handler
@@ -428,7 +440,9 @@ class MazeGame {
 }
 
 // Start the game when the page loads
-window.onload = () => new MazeGame(); 
+window.onload = () => {
+    game = new MazeGame();
+};
 
 // Add this to your initialization code
 function initControls() {
@@ -499,3 +513,58 @@ if (document.readyState === 'loading') {
 document.addEventListener('touchmove', function(e) {
     e.preventDefault();
 }, { passive: false }); 
+
+// Add these functions to handle the seed functionality
+function initSeedControl() {
+    const seedInput = document.getElementById('seedInput');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const newGameBtn = document.getElementById('newGameButton');
+    
+    // Set initial random seed
+    seedInput.value = Math.floor(Math.random() * 1000000);
+    
+    // Handle regenerate button
+    regenerateBtn.addEventListener('click', () => {
+        const seed = parseInt(seedInput.value);
+        console.log("Regenerate clicked with seed:", seed);
+        regenerateWithSeed(seed);
+    });
+    
+    // Handle Enter key in seed input
+    seedInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            regenerateWithSeed(parseInt(seedInput.value));
+        }
+    });
+    
+    // Modify the Nouvelle Partie button behavior
+    if (newGameBtn) {
+        newGameBtn.addEventListener('click', () => {
+            const newSeed = Math.floor(Math.random() * 1000000);
+            seedInput.value = newSeed;
+            regenerateWithSeed(newSeed);
+        }, true);  // Using capture phase
+    }
+}
+
+// Helper function for seeded random numbers
+function seededRandom() {
+    return Math.random();  // This will use the seeded random after Math.seedrandom is called
+}
+
+function regenerateWithSeed(seed) {
+    console.log("Regenerating with seed:", seed);
+    
+    // Create a new seeded random number generator
+    Math.seedrandom(seed.toString());
+    
+    // Call startGame on the game instance
+    if (game) {
+        game.startGame();
+    } else {
+        console.error('Game instance not initialized');
+    }
+}
+
+// Add this to your initialization code
+document.addEventListener('DOMContentLoaded', initSeedControl); 

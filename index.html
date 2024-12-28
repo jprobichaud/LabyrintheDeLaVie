@@ -20,6 +20,11 @@
         </div>
         <div class="game-area">
             <canvas id="mazeCanvas"></canvas>
+            <div class="seed-control">
+                <label for="seedInput">Seed:</label>
+                <input type="number" id="seedInput" value="1">
+                <button id="regenerateBtn">Regenerate</button>
+            </div>
             <div class="legend">
                 <h3>Legend:</h3>
                 <div class="legend-item">
@@ -56,6 +61,7 @@
             <button id="playAgain">Rejouer</button>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
     <script src="game.js"></script>
 </body>
 </html> 

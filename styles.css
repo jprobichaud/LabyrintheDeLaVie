@@ -162,4 +162,20 @@ input#showPortals:checked ~ .container .portal-legend {
     color: white;
     cursor: pointer;
     touch-action: manipulation;
+}
+
+.seed-control {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.seed-control input {
+    width: 100px;
+    margin: 0 10px;
+    padding: 5px;
+}
+
+.seed-control button {
+    padding: 5px 10px;
+    cursor: pointer;
 } 
