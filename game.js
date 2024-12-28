@@ -432,46 +432,70 @@ window.onload = () => new MazeGame();
 
 // Add this to your initialization code
 function initControls() {
-    // Touch/click controls
     const buttons = {
-        'upBtn': 'ArrowUp',
-        'leftBtn': 'ArrowLeft',
-        'rightBtn': 'ArrowRight',
-        'downBtn': 'ArrowDown'
+        'upBtn': { key: 'ArrowUp', code: 38 },
+        'leftBtn': { key: 'ArrowLeft', code: 37 },
+        'rightBtn': { key: 'ArrowRight', code: 39 },
+        'downBtn': { key: 'ArrowDown', code: 40 }
     };
 
-    for (const [btnId, keyValue] of Object.entries(buttons)) {
+    for (const [btnId, keyInfo] of Object.entries(buttons)) {
         const button = document.getElementById(btnId);
         if (button) {
             // Handle both touch and click events
             ['touchstart', 'mousedown'].forEach(eventType => {
-                button.addEventListener(eventType, (e) => {
+                button.addEventListener(eventType, function(e) {
                     e.preventDefault(); // Prevent default behavior
-                    // Create and dispatch a keyboard event
-                    const keyEvent = new KeyboardEvent('keydown', {
-                        key: keyValue,
-                        code: keyValue,
-                        keyCode: keyValue === 'ArrowUp' ? 38 :
-                                keyValue === 'ArrowDown' ? 40 :
-                                keyValue === 'ArrowLeft' ? 37 : 39,
-                        which: keyValue === 'ArrowUp' ? 38 :
-                               keyValue === 'ArrowDown' ? 40 :
-                               keyValue === 'ArrowLeft' ? 37 : 39,
-                        bubbles: true
-                    });
-                    document.dispatchEvent(keyEvent);
-                });
+                    e.stopPropagation(); // Stop event bubbling
+                    
+                    // Try both keydown and direct movement handling
+                    try {
+                        // Method 1: Dispatch keyboard event
+                        const keyEvent = new KeyboardEvent('keydown', {
+                            key: keyInfo.key,
+                            keyCode: keyInfo.code,
+                            which: keyInfo.code,
+                            code: keyInfo.key,
+                            bubbles: true,
+                            cancelable: true
+                        });
+                        document.dispatchEvent(keyEvent);
+                        
+                        // Method 2: Direct movement call
+                        // This assumes your game uses these direction values
+                        switch(btnId) {
+                            case 'upBtn': moveUp(); break;
+                            case 'leftBtn': moveLeft(); break;
+                            case 'rightBtn': moveRight(); break;
+                            case 'downBtn': moveDown(); break;
+                        }
+                    } catch(error) {
+                        console.log('Movement handler error:', error);
+                    }
+                }, { passive: false });
             });
 
-            // Add visual feedback when button is pressed
-            button.addEventListener('mousedown', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.4)');
-            button.addEventListener('mouseup', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
-            button.addEventListener('mouseleave', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
-            button.addEventListener('touchstart', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.4)');
-            button.addEventListener('touchend', () => button.style.backgroundColor = 'rgba(0, 0, 0, 0.2)');
+            // Visual feedback
+            const pressedColor = 'rgba(0, 0, 0, 0.4)';
+            const normalColor = 'rgba(0, 0, 0, 0.2)';
+            
+            button.addEventListener('mousedown', () => button.style.backgroundColor = pressedColor);
+            button.addEventListener('mouseup', () => button.style.backgroundColor = normalColor);
+            button.addEventListener('mouseleave', () => button.style.backgroundColor = normalColor);
+            button.addEventListener('touchstart', () => button.style.backgroundColor = pressedColor);
+            button.addEventListener('touchend', () => button.style.backgroundColor = normalColor);
         }
     }
 }
 
-// Make sure to call initControls when the page loads
-document.addEventListener('DOMContentLoaded', initControls); 
+// Ensure controls are initialized after the DOM and your game code is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initControls);
+} else {
+    initControls();
+}
+
+// Prevent default touch behaviors that might interfere with the game
+document.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false }); 
